@@ -1,0 +1,4 @@
+bin/
+gen/
+ant.properties
+build_*.xml
