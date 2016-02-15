@@ -8,10 +8,12 @@
  -> inner block
 -> - > if else branch
 ```
+<br>
 
 #### demo_activity
 <br>
-* ##### EsptouchDemoActivity
+
+* EsptouchDemoActivity
 
   * onCreate<br>
 	```
@@ -74,7 +76,9 @@
 	```
 	runOnUiThread -> run -> toast: IEsptouchResult.getBssid (connect to wifi)
 	```
-* ##### EspWifiAdminSimple
+<br>
+
+* EspWifiAdminSimple
   * EspWifiAdminSimple
   ```
   ->> Context -> mContext
@@ -103,13 +107,14 @@
   ```
   <- WifiInfo -> getBSSID
   ```
+<br>
 
 #### \*Esptouch\*
 IEsptouch\* -- interfaces<br>
 Esptouch\* -- implements
 <br>
-* ##### IEsptouchResult<br>
-* ##### EsptouchResult<br>
+* IEsptouchResult<br>
+* EsptouchResult<br>
   * EsptouchResult
   ```
   ->> mIsSuc, mBssid, mInetAddress InetAddress, mIsCancelled AtomicBoolean
@@ -123,8 +128,8 @@ Esptouch\* -- implements
   ->> isCancelled
   -> mIsCancelled.set
   ```
-* ##### IEsptouchTask<br>
-* ##### EsptouchTask<br>
+* IEsptouchTask<br>
+* EsptouchTask<br>
   * EsptouchTask
   ```
   -> _mParameter EsptouchTaskParameter
@@ -144,19 +149,20 @@ Esptouch\* -- implements
   ```
   ->> _mEsptouchTask.setEsptouchListener << esptouchListener IEsptouchListener
   ```
-* ##### IEsptouchListener<br>
+* IEsptouchListener<br>
   * onEsptouchResultAdded
+<br>
 
 #### task
 <br>
-* ##### IEsptouchTaskParameter
-* ##### EsptouchTaskParameter
+* IEsptouchTaskParameter
+* EsptouchTaskParameter
   * EsptouchTaskParameter<br>
     constructor for initializing private variables
-* ##### IEsptouchGenerator
-* ##### ICodeData
-* ##### __IEsptouchTask
-* ##### __EsptouchTask
+* IEsptouchGenerator
+* ICodeData
+* __IEsptouchTask
+* __EsptouchTask
   * __EsptouchTask
   ```
   ->> apSsid, ApBssid, apPasswd, context Context, parameter IEsptouchTaskParameter, isSsidHidden
