@@ -14,28 +14,28 @@
 <br>
 * EsptouchDemoActivity
   * onCreate
-	```
-	-> setContentView
-	-> findViewById
-	-> setOnClickListener
-	```
+  ```
+  -> setContentView
+  -> findViewById
+  -> setOnClickListener
+  ```
   * onResume
-	```
-	-> setText << EspWifiAdminSimple.getWifiConnectedSsid
-	-> setEnabled
-	```
+  ```
+  -> setText << EspWifiAdminSimple.getWifiConnectedSsid
+  -> setEnabled
+  ```
   * onClick
-	```
-	-> check View confirm button
-	-> EsptouchAsyncTask3.execute << apSsid, apPasswd, apBssid, isSsidHidden, taskResultCountStr
-	```
+  ```
+  -> check View confirm button
+  -> EsptouchAsyncTask3.execute << apSsid, apPasswd, apBssid, isSsidHidden, taskResultCountStr
+  ```
   * IEsptouchListener
-	```
-	-> IEsptouchListener
-	-> onEsptouchResultAdded
-	->> onEsptouchResultAddedPerform
-	<< IEsptouchResult
-	```
+  ```
+  -> IEsptouchListener
+  -> onEsptouchResultAdded
+  ->> onEsptouchResultAddedPerform
+  << IEsptouchResult
+  ```
   * EsptouchAsyncTask3
 	* onPreExecute
 	```
@@ -59,7 +59,7 @@
 	-> executeForResults << parseInt(taskResultCountStr) 
 	<- List IEsptouchResult
 	```
-	onPostEcecute
+	* onPostEcecute
 	```
 	->> List IEsptouchResult << result
 	-> getButton -> setEnabled << true -> setText << Confirm
@@ -77,9 +77,9 @@
 		->> IEsptouchResult
 	```
   * onEsptouchResultAddedPerform
-	```
-	runOnUiThread -> run -> toast: IEsptouchResult.getBssid (connect to wifi)
-	```
+  ```
+  -> runOnUiThread -> run -> toast: IEsptouchResult.getBssid (connect to wifi)
+  ```
 <br>
 
 * EspWifiAdminSimple
@@ -274,32 +274,32 @@ Esptouch\* -- implements
 * UDPSocketClient
 
   * UDPSOcketClient
-    ```
-    -> mSocket DatagramSocket --> e.printStackTrace
-    ```
+  ```
+  -> mSocket DatagramSocket --> e.printStackTrace
+  ```
   * finalize
-    ```
-    -> close -> super.finzlize
-    ```
+  ```
+  -> close -> super.finzlize
+  ```
   * interrupt
-    ```
-    -> mIsStop << true 
-    ```
+  ```
+  -> mIsStop << true 
+  ```
   * close
-    synchronized
-    ```
-    -> mIsClosed -> mSocket.close -> mIsClose << true 
-    ```
+  synchronized
+  ```
+  -> mIsClosed -> mSocket.close -> mIsClose << true 
+  ```
   * sendData
-	```
-	-> mIsStop
-	 -> check data and data packet length
-	 -> mSocket.send
-	 << localDatagramPacket DatagramPacket
-	 << data packet  packet length  InetAddress.getByName << targetHostName  targetPort
-	 ->> Thread.sleep << interval
-	-> close
-	```
+  ```
+  -> mIsStop
+  -> check data and data packet length
+  -> mSocket.send
+  << localDatagramPacket DatagramPacket
+  << data packet  packet length  InetAddress.getByName << targetHostName  targetPort
+  ->> Thread.sleep << interval
+  -> close
+  ```
 
 * UDPSocketServer
 
