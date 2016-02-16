@@ -1,4 +1,4 @@
-### *** esptouch ***
+### esptouch
 <br>
 ```
 -> workflow
@@ -6,27 +6,25 @@
 << take parameter
 <- return
  -> inner block
--> - > if else branch
+-> --> if else branch
 ```
 <br>
 
 #### demo_activity
 <br>
-
 * EsptouchDemoActivity
-
-  * onCreate<br>
+  * onCreate
 	```
 	-> setContentView
 	-> findViewById
 	-> setOnClickListener
 	```
-  * onResume<br>
+  * onResume
 	```
 	-> setText << EspWifiAdminSimple.getWifiConnectedSsid
 	-> setEnabled
 	```
-  * onClick<br>
+  * onClick
 	```
 	-> check View confirm button
 	-> EsptouchAsyncTask3.execute << apSsid, apPasswd, apBssid, isSsidHidden, taskResultCountStr
@@ -39,37 +37,43 @@
 	<< IEsptouchResult
 	```
   * EsptouchAsyncTask3
+	* onPreExecute
 	```
-	onPreExecute
-		-> mProgressDialog
-		-> setMessage << Esptouch configuring
-		-> setCanceledOnTouchOutside << false
-		-> setOnCancelListener -> mEsptouchTask.interrupt
-		-> setButton POSTITIVE << Waiting -> setEnabled << false
-		-> show
-			Esptouch configuring
-			--------------------
-				 Waiting
-	doInBackground
-		-> mIEsptouchTask
-		->> String... params Array	
-		-> synchronized mLock Object ->> apSsid, apBssid, apPassword, isSsidHidden, EsptouchDemoActivity.this
-		-> EsptouchTask 
-		-> setEsptouchListener IEsptouchListener
-		-> executeForResults << parseInt(taskResultCountStr) 
-		<- List IEsptouchResult
+	-> mProgressDialog
+	-> setMessage << Esptouch configuring
+	-> setCanceledOnTouchOutside << false
+	-> setOnCancelListener -> mEsptouchTask.interrupt
+	-> setButton POSTITIVE << Waiting -> setEnabled << false
+	-> show
+		Esptouch configuring
+		--------------------
+			 Waiting
+	```
+	* doInBackground
+	```
+	-> mIEsptouchTask
+	->> String... params Array	
+	-> synchronized mLock Object ->> apSsid, apBssid, apPassword, isSsidHidden, EsptouchDemoActivity.this
+	-> EsptouchTask 
+	-> setEsptouchListener IEsptouchListener
+	-> executeForResults << parseInt(taskResultCountStr) 
+	<- List IEsptouchResult
+	```
 	onPostEcecute
-		->> List IEsptouchResult << result
-		-> getButton -> setEnabled << true -> setText << Confirm
-		-> result.get << 0
-		-> isCancelled -> isSuc -> collect result -> setMessage
+	```
+	->> List IEsptouchResult << result
+	-> getButton -> setEnabled << true -> setText << Confirm
+	-> result.get << 0
+	-> isCancelled -> isSuc -> collect result -> setMessage
 	```
   * EsptouchAsyncTask2
 	different on parameters
+	* doInBackground
 	```
-	doInBackground
-		-> executeForResults << void
-	onPostExecute
+	-> executeForResults << void
+	```
+	* onPostExecute
+	```
 		->> IEsptouchResult
 	```
   * onEsptouchResultAddedPerform
@@ -225,9 +229,9 @@ Esptouch\* -- implements
 	 ->> mSocketClient.sendData
 	 << generator.getGCBytes2, getTargetHostName, getTargetPort, getIntervalGuideCodeMillisecond
 	-> update lastTime
-   - >> mSocketClient.sendData
+   -->> mSocketClient.sendData
    << generator.getDCByte2, index, ONE_DATA_LEN, getTargetHostName, getTargetPort, getIntervalDataCodeMillisecond
-   - > update index
+   --> update index
    -> update currentTime 
    <- timeout getWaitUdpSendingMillisecond 45000milliseconds
   <- mIsSuc
@@ -265,3 +269,163 @@ Esptouch\* -- implements
   ->> mEsptouchListener IEsptouchListener
   ```
 
+#### udp
+
+* UDPSocketClient
+
+  * UDPSOcketClient
+    ```
+    -> mSocket DatagramSocket --> e.printStackTrace
+    ```
+  * finalize
+    ```
+    -> close -> super.finzlize
+    ```
+  * interrupt
+    ```
+    -> mIsStop << true 
+    ```
+  * close
+    synchronized
+    ```
+    -> mIsClosed -> mSocket.close -> mIsClose << true 
+    ```
+  * sendData
+	```
+	-> mIsStop
+	 -> check data and data packet length
+	 -> mSocket.send
+	 << localDatagramPacket DatagramPacket
+	 << data packet  packet length  InetAddress.getByName << targetHostName  targetPort
+	 ->> Thread.sleep << interval
+	-> close
+	```
+
+* UDPSocketServer
+
+  aquireLock not paired with releaseLock?
+
+  * UDPSocketServer
+  ```
+  -> mReceivePacket DatagramPacket << buffer byte[]
+  ->> mServerSocket DatagramSocket << port int
+  ->> manager WifiManager Context.getSystemSever << Context.WIFI_SERVICE
+  -> mLock WifiManager.MulticastLock manager.createMulticastLock
+  --> IOException ->> e.printStackTrace
+  ```
+  * acquireLock, releaseLock
+  ```
+  -> check mLock and mLock.isHeld
+  -> mLock.acquire, mLock.release
+  ```
+  * setSoTimeout
+  ```
+  ->> mSocketSocket.setSoTimeout << timeout
+  ```
+  * receiveOneByte
+  ```
+  -> acquireLock
+  -> mServerSocket.receive << mReceivePacket
+  <- mReceivePacket.getData
+  --> <- Byte.MIN_VALUE
+  ```
+  * receiveSpecLenBytes
+  ```
+  -> acquireLock -> mServerSocket.receive << mReceivePacket
+  <- Arrays.copyOf << mReceivePacket getData getLength
+  ```
+  * close, interrupt, finalize
+  ```
+  -> mIsClosed -> mServerSocket.close -> releaseLock -> mIsClosed << true,
+  -> close,
+  -> close -> super.finalize
+  ```
+
+#### util
+
+* EspNetUtil
+  * getLocalInetAddress
+  ```
+  ->> context.getSystemService << Context.WIFI_SERVICE
+  -> getConnectionInfo -> getIpAddress -> __formatString
+  <- InetAddress.getByName
+  ```
+  * __formatString
+  ```
+  ->> byte[] __intToByteArray << int
+  <- String << byte[] + .
+  ```
+  * __intToByteArray
+  ```
+  -> byte[] ->> and 0xFF << int
+  <- byte[]
+  ```
+  * parseInetAddr
+  ```
+  ->> StringBuilder.append Integer.toString << loop byte[] with offset
+  <- InetAddress.getByName << StringBuilder.toString
+  ```
+  * parseBssid2bytes
+  ```
+  ->> String[] String.split << :
+  <- byte[] Integer.parseInt << String[] 
+  ```
+* ByteUtil
+* CRC8
+
+
+#### protocal
+
+* EsptouchGenerator
+  * EsptouchGenerator
+  ```
+  -> mGcBytes2 byte[][] ByteUtil.genSpecBytes << GuideCode.getU8s
+  ->> mDcBytes2 byte[][] ByteUtil.genSpecBytes
+  <<  DatumCode << apSsid, apBssid, apPassword, inetAddress, isSsidHiden getU8s
+  ```
+  * getGCBytes2, getDCBytes2
+  ```
+  <- mGcBytes2, mDcBytes2
+  ```
+* DatumCode
+  * DatumCode
+  ```
+  ->> apSsid, apBssid, apPassword, ipAddress, isSsidHidden
+  -> CRC8 check
+  -> mDataCode[0] DataCode << _totalLen, 0 -> totalXor _totalLen
+  -> mDataCode[1] DataCode << apPwdLen, 1 -> totalXor apPwdLen
+  -> mDataCode[2] DataCode << apSsidCrc, 2 -> totalXor apSsidCrc
+  -> mDataCode[3] DataCode << apBssidCrc, 3 -> totalXor apBssidCrc
+  -> mDataCode[EXTRA_HEAD_LEN+i] DataCode
+   << ipAddrChars[i], i+EXTRA_HEAD_LEN -> totalXor ipAddrChars[i]
+  -> mDataCode[EXTRA_HEAD_LEN+ipLen] DataCode
+   << apPwdChars[i], i+EXTRA_HEAD_LEN+ipLen -> totalXor apPwdChars[i]
+  -> isSsidHiden -> mDataCode[i+EXTRA_HEAD_LEN+ipLen+apPwdLen] DataCode
+   << apSsidChars[i], i+EXTRA_HEAD_LEN+ipLen+apPwdLen
+  -> mDataCode[4] DataCode << totalXor, 4
+  ```
+  * getBytes
+  * toString
+  * getU8s
+* DataCode
+  * DataCode
+  mSeqHeader, mDataHigh, mDataLow, mCrcHigh, mCrcLow
+  ```
+  ->> ByteUtil.splitUint8To2bytes << u8 -> mDataHigh, mDataLow
+  -> CRC8
+   -> update << ByteUtil.splitUint8toByte << u8 -> update << index
+   -> mCrcHigh, mCrcLow
+  -> mSeqHeader << index
+  ```
+  * getBytes
+  ```
+  -> dataBytes byte[]
+  -> dataBytes[0] << 0x00
+  -> dataBytes[1] ByteUtil.combine2bytesToOne << mCrcHigh, mDataHigh
+  -> dataBytes[2] << 0x01
+  -> databytes[3] mSeqHeader
+  -> dataBytes[4] << 0x00
+  -> dataBytes[5] ByteUtil.combine2bytesToOne << mCrcLow, mDataLow
+  <- dataBytes
+  ```
+  * toString
