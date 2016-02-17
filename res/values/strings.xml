@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">EspTinyActivity</string>
+	<string name="buttonLogin">Login</string>
 	<string name="textApSsid">ApSsid:</string>
 	<string name="textNoSsid">NoSsid</string>
 	<string name="textApPasswd">Password:</string>
+	<string name="editApPasswdEmpty">password</string>
 	<string name="checkIsSsidHidden">Hidden</string>
 	<string name="buttonSmartConfig">Confirm</string>
 </resources>
