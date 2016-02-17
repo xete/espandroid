@@ -2,10 +2,12 @@
 <resources>
 	<string name="app_name">EspTinyActivity</string>
 	<string name="buttonLogin">Login</string>
+	<string name="buttonLogout">Control</string>
 	<string name="textApSsid">ApSsid:</string>
 	<string name="textNoSsid">NoSsid</string>
 	<string name="textApPasswd">Password:</string>
 	<string name="editApPasswdEmpty">password</string>
 	<string name="checkIsSsidHidden">Hidden</string>
 	<string name="buttonSmartConfig">Confirm</string>
+	<string name="textViewControlInfo">Control Info</string>
 </resources>
