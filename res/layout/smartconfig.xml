@@ -41,7 +41,14 @@
 			android:layout_width="120px"
 			android:layout_height="wrap_content"
 			android:singleLine="true"
+			android:inputType="textPassword"
 			android:hint="@string/editApPasswdEmpty"/>
+		<CheckBox
+			android:id="@+id/checkBoxIsPasswdVissible"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:scaleX="0.6"
+			android:scaleY="0.6"/>
 		</LinearLayout>
 	<CheckBox
 		android:id="@+id/checkIsSsidHidden"

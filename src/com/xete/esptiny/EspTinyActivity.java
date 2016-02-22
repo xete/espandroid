@@ -27,7 +27,6 @@ public class EspTinyActivity extends Activity implements OnClickListener
 		mButtonLogout = (Button) findViewById(R.id.buttonLogout);
 		mButtonLogin.setOnClickListener(this);
 		mButtonLogout.setOnClickListener(this);
-
     }
 
 		
@@ -41,7 +40,7 @@ public class EspTinyActivity extends Activity implements OnClickListener
 				intent.setClass(EspTinyActivity.this, ControlActivity.class);	
 			}
 			EspTinyActivity.this.startActivity(intent);
-			EspTinyActivity.this.finish();
+			/* EspTinyActivity.this.finish(); */
 		}
 	}
 }

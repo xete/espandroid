@@ -19,8 +19,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.text.InputType;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -40,6 +42,8 @@ public class EsptouchActivity extends Activity implements OnClickListener {
 	
 	private CheckBox mCheckIsSsidHidden;
 
+	private CheckBox mCheckBoxIsPasswdVissible;
+
 	private EspWifiAdminSimple mWifiAdmin;
 	
 	@Override
@@ -52,7 +56,10 @@ public class EsptouchActivity extends Activity implements OnClickListener {
 		mEditApPasswd = (EditText) findViewById(R.id.editApPasswd);
 		mButtonSmartConfig = (Button) findViewById(R.id.buttonSmartConfig);
 		mCheckIsSsidHidden = (CheckBox) findViewById(R.id.checkIsSsidHidden);
+		mCheckBoxIsPasswdVissible = (CheckBox) findViewById(R.id.checkBoxIsPasswdVissible);
 		mButtonSmartConfig.setOnClickListener(this);
+		mCheckBoxIsPasswdVissible.setChecked(true);
+		mCheckBoxIsPasswdVissible.setOnClickListener(this);
 	}
 	
 	@Override
@@ -91,6 +98,8 @@ public class EsptouchActivity extends Activity implements OnClickListener {
 			}
 			new EsptouchAsyncTask3().execute(apSsid, apBssid, apPassword,
 					isSsidHiddenStr, "1");
+		} else if (v == mCheckBoxIsPasswdVissible) {
+			mEditApPasswd.setInputType(mEditApPasswd.getInputType() ^ InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		}
 	}
 	
