@@ -3,9 +3,6 @@ package com.xete.esptiny;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.BufferedReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.net.ServerSocket;
@@ -28,28 +25,35 @@ public class XSocketServer extends AsyncTask<Void, Void, Void> {
 	private String mAddress;
 	private int mPort = 10866;
 	private int mTimeout = 0;
-	private ServerSocket mServer = null;
+	private static ServerSocket mServer = null;
 	private Handler mHandler;
 	private ArrayList<Socket> mClients = null;
 	private StringBuilder mStatus;
 	private boolean mIsSuccess = true;
 	private final static Integer SIZE_RB = 2048;
 	private final static Integer SIZE_SB = 2048;
+	private IXSocketServer mListener = null;
+	public interface IXSocketServer {
+		public void onConnected(Socket socket);	
+		public void onRead(Socket socket, byte[] rb, int len);
+		public void onDisconnected(Socket socket);
+	}
 	
-	XSocketServer(Context context) {
-		mContext = context;
-		mAddress = acquireAddress();
+	public XSocketServer(Context context) {
+		this(context, 0, 0);
 	}
-	XSocketServer(Context context, int port) {
-		mContext = context;
-		mPort = port;
-		mAddress = acquireAddress();
+	public XSocketServer(Context context, int port) {
+		this(context, port, 0);
 	}
-	XSocketServer(Context context, int port, int timeout) {
+	public XSocketServer(Context context, int port, int timeout) {
 		mContext = context;
-		mPort = port;
+		if(port != 0) mPort = port;
 		mTimeout = timeout;
 		mAddress = acquireAddress();
+	}
+
+	public void addListener(IXSocketServer listener) {
+		mListener = listener;	
 	}
 
 	@Override
@@ -89,6 +93,10 @@ public class XSocketServer extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected Void doInBackground(Void... args) {
 		Log.v(TAG, "doInBackground");
+		if(mListener == null) {
+			Log.v(TAG, "no listener");
+			return null;
+		}
 		if(!mIsSuccess) {
 			Log.v(TAG, "server not setup, nothing to do");
 			return null;
@@ -106,6 +114,7 @@ public class XSocketServer extends AsyncTask<Void, Void, Void> {
 				sb.append(":");
 				sb.append(client.getPort());
 				Log.v(TAG, sb.toString());
+				mListener.onConnected(client);
 			} catch(IOException e) {
 				e.printStackTrace();
 				this.cancel(true);
@@ -201,6 +210,7 @@ public class XSocketServer extends AsyncTask<Void, Void, Void> {
 					len = stream.read(read_buffer, 0, SIZE_RB);	
 					if( len != -1 ) {
 						Log.v(TAG, id+" -> "+(new String(read_buffer, 0, len)));
+						mListener.onRead(client, read_buffer, len);
 					}
 				} catch(IOException e) {
 					Log.v(TAG, id+" has been closed");
@@ -217,14 +227,9 @@ public class XSocketServer extends AsyncTask<Void, Void, Void> {
 					e.printStackTrace();
 				} finally {
 					if(isDown) { 
-						Log.v(TAG, "post remover");
-						mHandler.post(new Runnable() {
-							@Override
-							public void run() {
-								mClients.remove(client);	
-								Log.v("handler", "remained: "+String.valueOf(mClients.size()));
-							}
-						});
+						Log.v(TAG, id+" is down");
+						mClients.remove(client);	
+						mListener.onDisconnected(client);
 						break;
 					}
 				}
