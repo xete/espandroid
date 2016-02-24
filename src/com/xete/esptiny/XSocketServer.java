@@ -58,7 +58,7 @@ public class XSocketServer extends AsyncTask<Void, Void, Void> {
 
 	@Override
 	protected void onPreExecute() {
-		String promopt = "UnknownError";
+		String promopt = "Server already set up";
 		Log.v(TAG, "onPreExecute");
 		try {
 			if(mServer == null) {
@@ -86,8 +86,10 @@ public class XSocketServer extends AsyncTask<Void, Void, Void> {
 			}
 		}
 		Log.v(TAG, promopt);
-		Toast toast = Toast.makeText(mContext.getApplicationContext(), promopt, Toast.LENGTH_SHORT);	
-		toast.show();
+		if(!mIsSuccess) {
+			Toast toast = Toast.makeText(mContext.getApplicationContext(), promopt, Toast.LENGTH_SHORT);	
+			toast.show();
+		}
 	}
 
 	@Override

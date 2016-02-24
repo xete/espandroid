@@ -9,5 +9,5 @@
 	<string name="editApPasswdEmpty">password</string>
 	<string name="checkIsSsidHidden">Hidden</string>
 	<string name="buttonSmartConfig">Confirm</string>
-	<string name="textViewControlInfo">Control Info</string>
+	<string name="textViewControlInfo">Server Down</string>
 </resources>

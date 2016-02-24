@@ -3,3 +3,4 @@ gen/
 ant.properties
 local.properties
 build_*.xml
+layout.md

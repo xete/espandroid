@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@android:color/white"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -57,7 +58,8 @@
 		android:layout_height="wrap_content"
 		android:scaleX="0.6"
 		android:scaleY="0.6"
-		android:textSize="20sp"/>
+		android:textSize="20sp"
+		android:textColor="#d3d3d3"/>
 	<Button
 		android:id="@+id/buttonSmartConfig"
 		android:text="@string/buttonSmartConfig"

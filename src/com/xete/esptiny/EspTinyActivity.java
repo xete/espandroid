@@ -9,10 +9,11 @@ import android.widget.ArrayAdapter;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.content.Intent;
+import android.util.Log;
 
 public class EspTinyActivity extends Activity implements OnClickListener
 {
-	
+	private final static String TAG = "EspTinyActivity";	
 	private Button mButtonLogin;
 	private Button mButtonLogout;
 
@@ -21,6 +22,7 @@ public class EspTinyActivity extends Activity implements OnClickListener
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         setContentView(R.layout.main);
 		
 		mButtonLogin = (Button) findViewById(R.id.buttonLogin);
@@ -28,7 +30,6 @@ public class EspTinyActivity extends Activity implements OnClickListener
 		mButtonLogin.setOnClickListener(this);
 		mButtonLogout.setOnClickListener(this);
     }
-
 		
 	@Override
 	public void onClick(View v) {

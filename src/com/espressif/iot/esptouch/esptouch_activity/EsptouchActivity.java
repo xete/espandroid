@@ -50,6 +50,7 @@ public class EsptouchActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.smartconfig);
+		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
 		mWifiAdmin = new EspWifiAdminSimple(this);
 		mTextApSsid = (TextView) findViewById(R.id.textNoSsid);
@@ -77,6 +78,13 @@ public class EsptouchActivity extends Activity implements OnClickListener {
 		}
 		// check whether the wifi is connected
 		mButtonSmartConfig.setEnabled(!isApSsidEmpty);
+	}
+
+	@Override
+	public void finish() {
+		super.finish();
+		Log.v(TAG, "finish");
+		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 	}
 
 	@Override
